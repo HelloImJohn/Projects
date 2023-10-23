@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageOps
 r = lambda: random.randint(0, 255)
 print('#%02X%02X%02X' % (r(), r(), r()))
 
-invPpl = 20
+invPpl = 10
 test = 2
 
 
