@@ -3,7 +3,20 @@ import csv
 import pandas as pd
 import time
 import threading
-import keyboard
+
+
+#btn press detection
+from curtsies import Input
+
+#this part needs to be paralalized so that it and the camera can run at the same time..
+with Input(keynames='curses') as input_generator:
+    for e in input_generator:
+        if repr(e) == ' ':
+            df = df.drop(toBeDel)
+            df.to_csv('idList.csv', encoding='utf-8', index=False)
+            print('coupon cashed in')
+        print(repr(e))
+
 
 camera_id = 0
 delay = 1
@@ -14,12 +27,11 @@ cap = cv2.VideoCapture(camera_id)
 
 
 def startCam():
+
     currentCoupon = "nothingrnlol"
     print(currentCoupon)
     while True:
-        if keyboard.read_key() == "a":
-            print("AAAAAAAAAAAAA")
-        #useCoupon('asdf')
+        
         ret, frame = cap.read()
         if ret:
             ret_qr, decoded_info, points, _ = qcd.detectAndDecodeMulti(frame)
