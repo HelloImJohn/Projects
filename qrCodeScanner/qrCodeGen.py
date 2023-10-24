@@ -1,5 +1,3 @@
-# basic_qrcode.py
-
 import segno
 import random
 import csv
@@ -8,9 +6,8 @@ from PIL import Image, ImageDraw, ImageFilter, ImageOps
 r = lambda: random.randint(0, 255)
 print('#%02X%02X%02X' % (r(), r(), r()))
 
-invPpl = 10
+invPpl = 5
 test = 2
-
 
 def createcsv(a):
     with open('idList.csv', 'w', newline='') as file:
@@ -51,6 +48,5 @@ def mergeImg(a):
         #back_im.save('rocket_pillow_paste.jpg', quality=95)
 
 createcsv(invPpl)
-mergeImg(invPpl)
-
 #genQR(invPpl)
+mergeImg(invPpl)
