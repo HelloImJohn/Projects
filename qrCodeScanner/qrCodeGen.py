@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageOps
 r = lambda: random.randint(0, 255)
 print('#%02X%02X%02X' % (r(), r(), r()))
 
-invPpl = 10
+invPpl = 1
 test = 2
 
 
@@ -51,6 +51,6 @@ def mergeImg(a):
         #back_im.save('rocket_pillow_paste.jpg', quality=95)
 
 createcsv(invPpl)
+#genQR(invPpl)
 mergeImg(invPpl)
 
-#genQR(invPpl)

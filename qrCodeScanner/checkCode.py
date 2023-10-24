@@ -2,20 +2,9 @@ import cv2
 import csv
 import pandas as pd
 import time
-import threading
+from pynput import keyboard
+from threading import Thread
 
-
-#btn press detection
-from curtsies import Input
-
-#this part needs to be paralalized so that it and the camera can run at the same time..
-with Input(keynames='curses') as input_generator:
-    for e in input_generator:
-        if repr(e) == ' ':
-            df = df.drop(toBeDel)
-            df.to_csv('idList.csv', encoding='utf-8', index=False)
-            print('coupon cashed in')
-        print(repr(e))
 
 
 camera_id = 0
@@ -56,12 +45,37 @@ def startCam():
         if cv2.waitKey(delay) & 0xFF == ord('q'):
             break
 
+#trying to find workaround multithreading and using this function
 def useCoupon(coupon):
-    if keyboard.is_pressed("space_bar"):
-        toBeDel = df[df['ID'].str.match(tempRem)].index[0]
-        df = df.drop(toBeDel)
-        df.to_csv('idList.csv', encoding='utf-8', index=False)
-        print("coupon used succesfully")
+    t2 = Thread(target=startCam())
+    t2.start()
+    def on_press(key):
+        try:
+            print('alphanumeric key {0} pressed'.format(
+                key.char))
+        except AttributeError:
+            print('special key {0} pressed'.format(
+                key))
+
+    def on_release(key):
+        print('{0} released'.format(
+            key))
+        if key == keyboard.Key.esc:
+            # Stop listener
+            return False
+
+    # Collect events until released
+    with keyboard.Listener(
+            on_press=on_press,
+            on_release=on_release) as listener:
+        listener.join()
+
+    # ...or, in a non-blocking fashion:
+    listener = keyboard.Listener(
+        on_press=on_press,
+        on_release=on_release)
+    listener.start()
+
 def checkQR(a):
     tempRem = a
     df = pd.read_csv(r"idList.csv")
@@ -92,8 +106,9 @@ def checkQR(a):
 
 
 #checkQR()
-startCam()
 
+
+startCam()
 
 
 cv2.destroyWindow(window_name)
